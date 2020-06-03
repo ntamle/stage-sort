@@ -1,0 +1,119 @@
+%%%%%%%%%%%%%%%%% DO NOT CHANGE HERE %%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{
+    \documentclass[twoside,11pt]{article}
+    %%%%% PACKAGES %%%%%%
+    \usepackage{pgm2016}
+    \usepackage{amsmath}
+    \usepackage{algorithm}
+    \usepackage[noend]{algpseudocode}
+    \usepackage{subcaption}
+    \usepackage[english]{babel}	
+    \usepackage{paralist}	
+    \usepackage[lowtilde]{url}
+    \usepackage{fixltx2e}
+    \usepackage{listings}
+    \usepackage{color}
+    \usepackage{hyperref}
+    \usepackage{stmaryrd}
+    \usepackage{auto-pst-pdf}
+    \usepackage{pst-all}
+    \usepackage{pstricks-add}
+    
+    %%%%% MACROS %%%%%%
+    \algrenewcommand\Return{\State \algorithmicreturn{} }
+    \algnewcommand{\LineComment}[1]{\State \(\triangleright\) #1}
+    \renewcommand{\thesubfigure}{\roman{subfigure}}
+    \definecolor{codegreen}{rgb}{0,0.6,0}
+    \definecolor{codegray}{rgb}{0.5,0.5,0.5}
+    \definecolor{codepurple}{rgb}{0.58,0,0.82}
+    \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+    \lstdefinestyle{mystyle}{
+       backgroundcolor=\color{backcolour},  
+       commentstyle=\color{codegreen},
+       keywordstyle=\color{magenta},
+       numberstyle=\tiny\color{codegray},
+       stringstyle=\color{codepurple},
+       basicstyle=\footnotesize,
+       breakatwhitespace=false,        
+       breaklines=true,                
+       captionpos=b,                    
+       keepspaces=true,                
+       numbers=left,                    
+       numbersep=5pt,                  
+       showspaces=false,                
+       showstringspaces=false,
+       showtabs=false,                  
+       tabsize=2
+    }
+    \lstset{style=mystyle}
+    \newcommand*{\SET}[1]  {\ensuremath{\mathbb{#1}}}
+    \newcommand{\C}{\SET{C}}
+    \newcommand{\R}{\SET{R}}
+    \newcommand{\Z}{\SET{Z}}
+    \newcommand{\N}{\SET{N}}
+    \newcommand{\K}{\SET{K}}
+    \DeclareMathOperator{\di}{d\!}
+    \newcommand{\K}{\SET{K}}
+
+    \begin{document}
+    
+    \title{Internship \assignmentNumber}
+    
+    \author{\name \studentName \email \studentEmail \\
+    \studentNumber
+    \addr
+    }
+    
+    \maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% }
+
+
+\section{The sorting operation}
+
+We consider the space $\mathbb{R}^n$. We can define the sorting operation as the function that output the sorted vector of a tuple $x \in \mathbb{R}^n$:
+\begin{equation}
+    sort : (x_1, ..., x_n) \longmapsto (x_{\sigma_1}, ..., x_{\sigma_n}) 
+\end{equation}
+where $\sigma \in \mathfrak{S}_n$ is any permutation such that $x_{\sigma_1} \leq  x_{\sigma_2} \leq ... \leq x_{\sigma_n}$. Let's note that $\sigma$ is not unique because we can have equality cases. However, the function is well-defined as we don't care how the equal elements are sorted.
+% preciser
+\begin{proposition}
+The sorting operation is a semialgebraic function. 
+\end{proposition}
+
+\paragraph{Proof:} 
+Let's recall that a semialgebraic set $A \subset \mathbb{R}^p$ is a finite union of sets of the form:
+\begin{equation}
+    \bigcap_{i=1}^k\: \{x \in \mathbb{R}^p \ | \ g_i(x) < 0, \ h_i(x) = 0 \}
+\end{equation}\\
+where the $g_i$ and $h_i$ are polynomial functions. The graph of a function $f : X \longrightarrow Y$ is the set:
+\begin{equation}
+    \Gamma_f = \{(x, y) \in X \times Y \ | \ y = f(x)  \}
+\end{equation}
+\\
+One can write the graph of $sort$ as a finite union of affine (thus polynomial) constrained sets:
+\begin{align*}
+    \Gamma_{sort} &= \{(x, x_{\sigma}) \in (\mathbb{R}^n)^2 \ | \ \sigma \in \mathfrak{S}_n,\ x_{\sigma_1} \leq  x_{\sigma_2} \leq ... \leq x_{\sigma_n} \}
+\end{align*}
+% no big deal
+Let's note that the fact inequalities are not strict is no big deal since we can rewrite it as a finite union of equalities and strict inequalities. The graph is then:
+
+\begin{align*}
+    \Gamma_{sort} = \bigcup_{ \sigma \in \mathfrak{S}_n} \bigcup_{I \subset \llbracket 1, n-1 \rrbracket} \{ (x, x_\sigma) \in (\mathbb{R}^n)^2 \ | \ &\forall i \in I,\: x_{\sigma_i} - x_{\sigma_{i+1}} < 0,\\ &\forall i \notin I\cup\{n\}, x_{\sigma_i} - x_{\sigma_{i+1}} = 0 \} 
+\end{align*}
+\\
+which define a semialgebraic set.
+
+\section{Conservative field for the sorting operation}
+Here we try to define a conservative mapping for the function $sort$. Indeed, we can see that the function is differentiable almost everywhere, on the complement of an union of manifolds having a dimension strictly inferior to $p$. Precisely, given a permutation $\sigma \in \permut_p$, the Jacobian of $sort$ on the region $U_\sigma := \left\{x \in \mathbb{R}^p \ | \ x_{\sigma_1} < x_{\sigma_2} < ... < x_{\sigma_{p-1}} < x_{\sigma_p}  \right\}$ is the permutation matrix $P_\sigma$.
+\\
+
+
+\begin{proposition}[Conservative mapping for $sort$] Let $J : \R^p \rightrightarrows \R^{p \times p}$ be the set-valued map defined by:
+\begin{equation}
+\forall x \in \R^p,\  J(x) = \operatorname{conv}  \left\{P_\sigma \ | \ x_{\sigma_1} \leq x_{\sigma_2} \leq ... \leq x_{\sigma_p}\right\} 
+\end{equation}
+\end{proposition}
+\noindent
+Then $J$ is a conservative mapping for $sort$.
+\end{document}
